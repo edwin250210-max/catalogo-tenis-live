@@ -37,11 +37,10 @@
       max-width: 1100px;
       margin: auto;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr auto;
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
 
-    input,
     select {
       width: 100%;
       padding: 12px;
@@ -222,25 +221,15 @@
 
 <body>
   <header>
-    <h1>TENIS NATALIA</h1>
+    <h1>CATÁLOGO DE TENIS</h1>
 
     <div class="controles">
-      <input
-        id="buscar"
-        type="search"
-        placeholder="Buscar modelo o código de barras"
-      >
-
-      <select id="ubicacion">
-        <option value="shop_location">Shop location</option>
-      </select>
-
       <button id="accesoAdmin" class="boton-admin" type="button">
         🔒 Acceso privado
       </button>
 
       <select id="talla">
-        <option value="">Todas las tallas</option>
+        <option value="">Presiona aquí para seleccionar tu talla</option>
         <option>22</option>
         <option>22.5</option>
         <option>23</option>
@@ -274,46 +263,27 @@
     const CONTRASENA_ADMIN = "291118";
 
     let productos = [];
-    let modoAdmin = sessionStorage.getItem("tenisNataliaAdmin") === "1";
+    let modoAdmin = false;
 
     const catalogo = document.getElementById("catalogo");
     const estado = document.getElementById("estado");
-    const buscar = document.getElementById("buscar");
-    const ubicacion = document.getElementById("ubicacion");
     const talla = document.getElementById("talla");
     const accesoAdmin = document.getElementById("accesoAdmin");
     const visorImagen = document.getElementById("visorImagen");
     const imagenGrande = document.getElementById("imagenGrande");
 
     function actualizarModoAdmin() {
-      const valorActual = ubicacion.value;
+      accesoAdmin.textContent = modoAdmin
+        ? "🔓 Volver a tienda"
+        : "🔒 Acceso privado";
 
-      ubicacion.innerHTML = '<option value="shop_location">Shop location</option>';
-
-      if (modoAdmin) {
-        ubicacion.insertAdjacentHTML("beforeend", `
-          <option value="almacen_2">Almacén de tenis 2</option>
-          <option value="total">Ambos almacenes</option>
-        `);
-        accesoAdmin.textContent = "🔓 Modo privado activo";
-        accesoAdmin.classList.add("activo");
-
-        if (["shop_location", "almacen_2", "total"].includes(valorActual)) {
-          ubicacion.value = valorActual;
-        }
-      } else {
-        ubicacion.value = "shop_location";
-        accesoAdmin.textContent = "🔒 Acceso privado";
-        accesoAdmin.classList.remove("activo");
-      }
-
+      accesoAdmin.classList.toggle("activo", modoAdmin);
       renderizar();
     }
 
     function pedirAccesoAdmin() {
       if (modoAdmin) {
         modoAdmin = false;
-        sessionStorage.removeItem("tenisNataliaAdmin");
         actualizarModoAdmin();
         return;
       }
@@ -324,7 +294,6 @@
 
       if (clave === CONTRASENA_ADMIN) {
         modoAdmin = true;
-        sessionStorage.setItem("tenisNataliaAdmin", "1");
         actualizarModoAdmin();
       } else {
         alert("Contraseña incorrecta");
@@ -367,8 +336,7 @@
     }
 
     function renderizar() {
-      const texto = limpiarTexto(buscar.value);
-      const almacen = ubicacion.value;
+      const almacen = modoAdmin ? "almacen_2" : "shop_location";
       const tallaElegida = talla.value;
 
       const filtrados = productos
@@ -386,17 +354,7 @@
             tallasDisponibles
           };
         })
-        .filter(producto => {
-          const codigos = producto.tallas
-            .map(v => v.codigo_barras || "")
-            .join(" ");
-
-          const coincideBusqueda =
-            limpiarTexto(producto.nombre).includes(texto) ||
-            limpiarTexto(codigos).includes(texto);
-
-          return coincideBusqueda && producto.tallasDisponibles.length > 0;
-        });
+        .filter(producto => producto.tallasDisponibles.length > 0);
 
       estado.textContent =
         `${filtrados.length} modelos disponibles`;
@@ -421,12 +379,9 @@
           `;
         }).join("");
 
-        const inventarioVisible =
-          almacen === "shop_location"
-            ? `Shop location: ${producto.shop_location}`
-            : almacen === "almacen_2"
-              ? `Almacén 2: ${producto.almacen_2}`
-              : `Shop: ${producto.shop_location} · Almacén 2: ${producto.almacen_2}`;
+        const inventarioVisible = modoAdmin
+          ? `Almacén 2: ${producto.almacen_2}`
+          : `Shop location: ${producto.shop_location}`;
 
         return `
           <article class="producto">
@@ -473,8 +428,6 @@
       }
     }
 
-    buscar.addEventListener("input", renderizar);
-    ubicacion.addEventListener("change", renderizar);
     talla.addEventListener("change", renderizar);
     accesoAdmin.addEventListener("click", pedirAccesoAdmin);
 
