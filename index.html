@@ -37,7 +37,7 @@
       max-width: 1100px;
       margin: auto;
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-columns: 2fr 1fr 1fr auto;
       gap: 8px;
     }
 
@@ -131,6 +131,63 @@
       font-size: 20px;
     }
 
+
+
+    .boton-admin {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 8px;
+      background: #222;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .boton-admin.activo {
+      background: #0a7a2f;
+    }
+
+    .imagen-producto {
+      cursor: zoom-in;
+    }
+
+    .visor-imagen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(0,0,0,.94);
+      cursor: zoom-out;
+    }
+
+    .visor-imagen.abierto {
+      display: flex;
+    }
+
+    .visor-imagen img {
+      max-width: 96vw;
+      max-height: 92vh;
+      object-fit: contain;
+      border-radius: 10px;
+      box-shadow: 0 8px 35px rgba(0,0,0,.5);
+    }
+
+    .visor-ayuda {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 18px;
+      color: white;
+      text-align: center;
+      font-size: 14px;
+      pointer-events: none;
+    }
+
     @media (max-width: 850px) {
       #catalogo {
         grid-template-columns: repeat(3, 1fr);
@@ -176,9 +233,11 @@
 
       <select id="ubicacion">
         <option value="shop_location">Shop location</option>
-        <option value="almacen_2">Almacén de tenis 2</option>
-        <option value="total">Ambos almacenes</option>
       </select>
+
+      <button id="accesoAdmin" class="boton-admin" type="button">
+        🔒 Acceso privado
+      </button>
 
       <select id="talla">
         <option value="">Todas las tallas</option>
@@ -203,17 +262,90 @@
   <div id="estado">Cargando catálogo...</div>
   <main id="catalogo"></main>
 
+  <div id="visorImagen" class="visor-imagen" aria-hidden="true">
+    <img id="imagenGrande" src="" alt="Imagen ampliada">
+    <div class="visor-ayuda">Toca otra vez para cerrar</div>
+  </div>
+
   <script>
     const API =
       "https://catalogo-backend-publico.onrender.com/api/catalogo";
 
+    const CONTRASENA_ADMIN = "291118";
+
     let productos = [];
+    let modoAdmin = sessionStorage.getItem("tenisNataliaAdmin") === "1";
 
     const catalogo = document.getElementById("catalogo");
     const estado = document.getElementById("estado");
     const buscar = document.getElementById("buscar");
     const ubicacion = document.getElementById("ubicacion");
     const talla = document.getElementById("talla");
+    const accesoAdmin = document.getElementById("accesoAdmin");
+    const visorImagen = document.getElementById("visorImagen");
+    const imagenGrande = document.getElementById("imagenGrande");
+
+    function actualizarModoAdmin() {
+      const valorActual = ubicacion.value;
+
+      ubicacion.innerHTML = '<option value="shop_location">Shop location</option>';
+
+      if (modoAdmin) {
+        ubicacion.insertAdjacentHTML("beforeend", `
+          <option value="almacen_2">Almacén de tenis 2</option>
+          <option value="total">Ambos almacenes</option>
+        `);
+        accesoAdmin.textContent = "🔓 Modo privado activo";
+        accesoAdmin.classList.add("activo");
+
+        if (["shop_location", "almacen_2", "total"].includes(valorActual)) {
+          ubicacion.value = valorActual;
+        }
+      } else {
+        ubicacion.value = "shop_location";
+        accesoAdmin.textContent = "🔒 Acceso privado";
+        accesoAdmin.classList.remove("activo");
+      }
+
+      renderizar();
+    }
+
+    function pedirAccesoAdmin() {
+      if (modoAdmin) {
+        modoAdmin = false;
+        sessionStorage.removeItem("tenisNataliaAdmin");
+        actualizarModoAdmin();
+        return;
+      }
+
+      const clave = prompt("Escribe la contraseña:");
+
+      if (clave === null) return;
+
+      if (clave === CONTRASENA_ADMIN) {
+        modoAdmin = true;
+        sessionStorage.setItem("tenisNataliaAdmin", "1");
+        actualizarModoAdmin();
+      } else {
+        alert("Contraseña incorrecta");
+      }
+    }
+
+    function abrirImagen(src, alt) {
+      if (!src) return;
+      imagenGrande.src = src;
+      imagenGrande.alt = alt || "Imagen ampliada";
+      visorImagen.classList.add("abierto");
+      visorImagen.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden";
+    }
+
+    function cerrarImagen() {
+      visorImagen.classList.remove("abierto");
+      visorImagen.setAttribute("aria-hidden", "true");
+      imagenGrande.src = "";
+      document.body.style.overflow = "";
+    }
 
     function limpiarTexto(texto) {
       return String(texto || "")
@@ -299,6 +431,7 @@
         return `
           <article class="producto">
             <img
+              class="imagen-producto"
               src="${producto.imagen || ""}"
               alt="${producto.imagen_alt || producto.nombre}"
               loading="lazy"
@@ -343,7 +476,20 @@
     buscar.addEventListener("input", renderizar);
     ubicacion.addEventListener("change", renderizar);
     talla.addEventListener("change", renderizar);
+    accesoAdmin.addEventListener("click", pedirAccesoAdmin);
 
+    catalogo.addEventListener("click", evento => {
+      const imagen = evento.target.closest(".imagen-producto");
+      if (imagen) abrirImagen(imagen.src, imagen.alt);
+    });
+
+    visorImagen.addEventListener("click", cerrarImagen);
+
+    document.addEventListener("keydown", evento => {
+      if (evento.key === "Escape") cerrarImagen();
+    });
+
+    actualizarModoAdmin();
     cargarCatalogo();
   </script>
 </body>
