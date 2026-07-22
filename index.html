@@ -37,7 +37,7 @@
       max-width: 1100px;
       margin: auto;
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
 
@@ -78,6 +78,10 @@
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,.12);
+    }
+
+    .producto.resurtido {
+      border: 3px solid #ff9800;
     }
 
     .producto img {
@@ -132,20 +136,38 @@
       font-size: 20px;
     }
 
-    .boton-admin {
+    .boton-admin,
+    .boton-resurtir {
       width: 100%;
+      min-height: 72px;
       padding: 12px;
       border: 0;
-      border-radius: 8px;
-      background: #222;
+      border-radius: 16px;
       color: #fff;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: bold;
       cursor: pointer;
     }
 
+    .boton-admin {
+      background: #222;
+    }
+
     .boton-admin.activo {
       background: #0a7a2f;
+    }
+
+    .boton-resurtir {
+      background: #d95f00;
+    }
+
+    .boton-resurtir.activo {
+      background: #d40000;
+      box-shadow: 0 0 0 3px rgba(255,255,255,.3);
+    }
+
+    .boton-resurtir[hidden] {
+      display: none;
     }
 
     .imagen-producto {
@@ -187,6 +209,78 @@
       pointer-events: none;
     }
 
+    .encabezado-resurtido {
+      margin-bottom: 10px;
+      padding: 9px;
+      border-radius: 8px;
+      background: #fff4df;
+      color: #b34600;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .lista-resurtido {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fila-resurtido {
+      display: grid;
+      grid-template-columns: .7fr 1fr 1fr 1fr;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 5px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background: #fafafa;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .fila-resurtido.encabezados {
+      background: #111;
+      color: #fff;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    .numero-talla {
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .shop-cero {
+      color: #d40000;
+      font-weight: 900;
+    }
+
+    .shop-bajo {
+      color: #d95f00;
+      font-weight: 900;
+    }
+
+    .mandar {
+      padding: 5px 3px;
+      border-radius: 6px;
+      background: #0a7a2f;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
+    .resumen-modelo {
+      margin-top: 10px;
+      padding: 8px;
+      border-radius: 8px;
+      background: #ffe600;
+      color: #111;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 900;
+    }
+
     @media (max-width: 850px) {
       #catalogo {
         grid-template-columns: repeat(3, 1fr);
@@ -198,8 +292,13 @@
         grid-template-columns: 1fr;
       }
 
+      select,
+      .boton-admin,
+      .boton-resurtir {
+        min-height: 72px;
+      }
+
       select {
-        min-height: 82px;
         padding: 18px 12px;
         border-width: 4px;
         border-radius: 16px;
@@ -220,17 +319,34 @@
       .nombre {
         font-size: 14px;
       }
+
+      .fila-resurtido {
+        font-size: 11px;
+      }
+
+      .mandar {
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <h1>CATÁLOGO DE TENIS</h1>
+    <h1 id="tituloCatalogo">CATÁLOGO DE TENIS</h1>
 
     <div class="controles">
       <button id="accesoAdmin" class="boton-admin" type="button">
         🔒 Acceso privado
+      </button>
+
+      <button
+        id="botonResurtir"
+        class="boton-resurtir"
+        type="button"
+        hidden
+      >
+        🚨 Resurtir Shop
       </button>
 
       <select id="talla">
@@ -267,29 +383,93 @@
 
     const CONTRASENA_ADMIN = "291118";
 
+    /*
+      Cantidad objetivo para Shop location.
+
+      Si Shop tiene 0 y Almacén 2 tiene suficiente:
+      manda 2.
+
+      Si Shop tiene 1:
+      manda 1.
+    */
+    const OBJETIVO_SHOP = 2;
+
     let productos = [];
     let modoAdmin = false;
+    let modoResurtir = false;
 
     const catalogo = document.getElementById("catalogo");
     const estado = document.getElementById("estado");
     const talla = document.getElementById("talla");
     const accesoAdmin = document.getElementById("accesoAdmin");
+    const botonResurtir = document.getElementById("botonResurtir");
+    const tituloCatalogo = document.getElementById("tituloCatalogo");
     const visorImagen = document.getElementById("visorImagen");
     const imagenGrande = document.getElementById("imagenGrande");
 
-    function actualizarModoAdmin() {
+    function numeroSeguro(valor) {
+      const numero = Number(valor || 0);
+
+      if (!Number.isFinite(numero)) {
+        return 0;
+      }
+
+      return Math.max(0, numero);
+    }
+
+    function inventarioTalla(variante, almacen) {
+      if (almacen === "shop_location") {
+        return numeroSeguro(variante.shop_location);
+      }
+
+      if (almacen === "almacen_2") {
+        return numeroSeguro(variante.almacen_2);
+      }
+
+      return numeroSeguro(variante.total);
+    }
+
+    function calcularCantidadParaMandar(variante) {
+      const shop = inventarioTalla(variante, "shop_location");
+      const almacen2 = inventarioTalla(variante, "almacen_2");
+
+      const faltante = Math.max(0, OBJETIVO_SHOP - shop);
+
+      return Math.min(faltante, almacen2);
+    }
+
+    function actualizarControles() {
       accesoAdmin.textContent = modoAdmin
         ? "🔓 Volver a tienda"
         : "🔒 Acceso privado";
 
       accesoAdmin.classList.toggle("activo", modoAdmin);
+
+      botonResurtir.hidden = !modoAdmin;
+
+      botonResurtir.textContent = modoResurtir
+        ? "📦 Ver catálogo Almacén 2"
+        : "🚨 Resurtir Shop";
+
+      botonResurtir.classList.toggle("activo", modoResurtir);
+
+      if (modoResurtir) {
+        tituloCatalogo.textContent = "🚨 RESURTIR SHOP";
+      } else if (modoAdmin) {
+        tituloCatalogo.textContent = "ALMACÉN DE TENIS 2";
+      } else {
+        tituloCatalogo.textContent = "CATÁLOGO DE TENIS";
+      }
+
       renderizar();
     }
 
     function pedirAccesoAdmin() {
       if (modoAdmin) {
         modoAdmin = false;
-        actualizarModoAdmin();
+        modoResurtir = false;
+        talla.value = "";
+        actualizarControles();
         return;
       }
 
@@ -299,10 +479,20 @@
 
       if (clave === CONTRASENA_ADMIN) {
         modoAdmin = true;
-        actualizarModoAdmin();
+        modoResurtir = false;
+        talla.value = "";
+        actualizarControles();
       } else {
         alert("Contraseña incorrecta");
       }
+    }
+
+    function cambiarModoResurtir() {
+      if (!modoAdmin) return;
+
+      modoResurtir = !modoResurtir;
+      talla.value = "";
+      actualizarControles();
     }
 
     function abrirImagen(src, alt) {
@@ -322,37 +512,35 @@
       document.body.style.overflow = "";
     }
 
-    function limpiarTexto(texto) {
-      return String(texto || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-    }
-
-    function inventarioTalla(variante, almacen) {
-      if (almacen === "shop_location") {
-        return Number(variante.shop_location || 0);
-      }
-
-      if (almacen === "almacen_2") {
-        return Number(variante.almacen_2 || 0);
-      }
-
-      return Number(variante.total || 0);
-    }
-
     function renderizar() {
-      const almacen = modoAdmin ? "almacen_2" : "shop_location";
+      if (modoAdmin && modoResurtir) {
+        renderizarResurtido();
+        return;
+      }
+
+      renderizarCatalogoNormal();
+    }
+
+    function renderizarCatalogoNormal() {
+      const almacen = modoAdmin
+        ? "almacen_2"
+        : "shop_location";
+
       const tallaElegida = talla.value;
 
       const filtrados = productos
         .map(producto => {
-          const tallasDisponibles = producto.tallas.filter(variante => {
+          const variantes = Array.isArray(producto.tallas)
+            ? producto.tallas
+            : [];
+
+          const tallasDisponibles = variantes.filter(variante => {
             const tieneInventario =
               inventarioTalla(variante, almacen) > 0;
 
             const coincideTalla =
-              !tallaElegida || variante.talla === tallaElegida;
+              !tallaElegida ||
+              String(variante.talla) === tallaElegida;
 
             return tieneInventario && coincideTalla;
           });
@@ -368,17 +556,24 @@
         `${filtrados.length} modelos disponibles`;
 
       if (!filtrados.length) {
-        catalogo.innerHTML =
-          '<div class="sin-resultados">No encontramos productos disponibles.</div>';
+        catalogo.innerHTML = `
+          <div class="sin-resultados">
+            No encontramos productos disponibles.
+          </div>
+        `;
         return;
       }
 
       catalogo.innerHTML = filtrados.map(producto => {
         const tallasHTML = producto.tallasDisponibles
           .map(variante => {
-            const cantidad = inventarioTalla(variante, almacen);
+            const cantidad =
+              inventarioTalla(variante, almacen);
+
             const clase =
-              cantidad === 1 ? "talla ultimo" : "talla";
+              cantidad === 1
+                ? "talla ultimo"
+                : "talla";
 
             return `
               <span class="${clase}">
@@ -391,45 +586,215 @@
           .join("");
 
         const inventarioVisible = modoAdmin
-          ? `Almacén 2: ${producto.almacen_2}`
-          : `Shop location: ${producto.shop_location}`;
+          ? `Almacén 2: ${numeroSeguro(producto.almacen_2)}`
+          : `Shop location: ${numeroSeguro(producto.shop_location)}`;
 
         return `
           <article class="producto">
             <img
               class="imagen-producto"
               src="${producto.imagen || ""}"
-              alt="${producto.imagen_alt || producto.nombre}"
+              alt="${producto.imagen_alt || producto.nombre || "Tenis"}"
               loading="lazy"
               onerror="this.src='https://placehold.co/600x600?text=Sin+imagen'"
             >
 
             <div class="contenido">
-              <h2 class="nombre">${producto.nombre}</h2>
-              <div class="existencias">${inventarioVisible}</div>
-              <div class="tallas">${tallasHTML}</div>
+              <h2 class="nombre">
+                ${producto.nombre || "Producto sin nombre"}
+              </h2>
+
+              <div class="existencias">
+                ${inventarioVisible}
+              </div>
+
+              <div class="tallas">
+                ${tallasHTML}
+              </div>
             </div>
           </article>
         `;
       }).join("");
     }
 
+    function renderizarResurtido() {
+      const tallaElegida = talla.value;
+
+      const productosParaResurtir = productos
+        .map(producto => {
+          const variantes = Array.isArray(producto.tallas)
+            ? producto.tallas
+            : [];
+
+          const tallasParaResurtir = variantes
+            .map(variante => {
+              const shop =
+                inventarioTalla(variante, "shop_location");
+
+              const almacen2 =
+                inventarioTalla(variante, "almacen_2");
+
+              const mandar =
+                calcularCantidadParaMandar(variante);
+
+              return {
+                ...variante,
+                shop,
+                almacen2,
+                mandar
+              };
+            })
+            .filter(variante => {
+              const coincideTalla =
+                !tallaElegida ||
+                String(variante.talla) === tallaElegida;
+
+              return variante.mandar > 0 && coincideTalla;
+            });
+
+          const totalMandar = tallasParaResurtir.reduce(
+            (suma, variante) => suma + variante.mandar,
+            0
+          );
+
+          return {
+            ...producto,
+            tallasParaResurtir,
+            totalMandar
+          };
+        })
+        .filter(producto => producto.tallasParaResurtir.length > 0)
+        .sort((a, b) => {
+          if (b.totalMandar !== a.totalMandar) {
+            return b.totalMandar - a.totalMandar;
+          }
+
+          return String(a.nombre || "").localeCompare(
+            String(b.nombre || ""),
+            "es"
+          );
+        });
+
+      const totalPares = productosParaResurtir.reduce(
+        (suma, producto) => suma + producto.totalMandar,
+        0
+      );
+
+      const totalTallas = productosParaResurtir.reduce(
+        (suma, producto) =>
+          suma + producto.tallasParaResurtir.length,
+        0
+      );
+
+      estado.textContent =
+        `${productosParaResurtir.length} modelos · ` +
+        `${totalTallas} tallas · ` +
+        `${totalPares} pares para mandar a Shop`;
+
+      if (!productosParaResurtir.length) {
+        catalogo.innerHTML = `
+          <div class="sin-resultados">
+            ✅ Shop location está bien surtido
+            ${tallaElegida ? ` en talla ${tallaElegida}` : ""}.
+          </div>
+        `;
+        return;
+      }
+
+      catalogo.innerHTML = productosParaResurtir
+        .map(producto => {
+          const filas = producto.tallasParaResurtir
+            .map(variante => {
+              const claseShop =
+                variante.shop === 0
+                  ? "shop-cero"
+                  : "shop-bajo";
+
+              return `
+                <div class="fila-resurtido">
+                  <div class="numero-talla">
+                    ${variante.talla}
+                  </div>
+
+                  <div class="${claseShop}">
+                    ${variante.shop}
+                  </div>
+
+                  <div>
+                    ${variante.almacen2}
+                  </div>
+
+                  <div class="mandar">
+                    ${variante.mandar}
+                  </div>
+                </div>
+              `;
+            })
+            .join("");
+
+          return `
+            <article class="producto resurtido">
+              <img
+                class="imagen-producto"
+                src="${producto.imagen || ""}"
+                alt="${producto.imagen_alt || producto.nombre || "Tenis"}"
+                loading="lazy"
+                onerror="this.src='https://placehold.co/600x600?text=Sin+imagen'"
+              >
+
+              <div class="contenido">
+                <h2 class="nombre">
+                  ${producto.nombre || "Producto sin nombre"}
+                </h2>
+
+                <div class="encabezado-resurtido">
+                  Necesita surtido
+                </div>
+
+                <div class="lista-resurtido">
+                  <div class="fila-resurtido encabezados">
+                    <div>Talla</div>
+                    <div>Shop</div>
+                    <div>Alm. 2</div>
+                    <div>Mandar</div>
+                  </div>
+
+                  ${filas}
+                </div>
+
+                <div class="resumen-modelo">
+                  Mandar ${producto.totalMandar}
+                  ${producto.totalMandar === 1 ? "par" : "pares"}
+                </div>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
     async function cargarCatalogo() {
       try {
-        const respuesta = await fetch(API);
+        const respuesta = await fetch(API, {
+          cache: "no-store"
+        });
 
         if (!respuesta.ok) {
           throw new Error(`Error ${respuesta.status}`);
         }
 
         const datos = await respuesta.json();
-        productos = datos.productos || [];
+
+        productos = Array.isArray(datos.productos)
+          ? datos.productos
+          : [];
 
         renderizar();
       } catch (error) {
         console.error(error);
 
-        estado.textContent = "No se pudo cargar el catálogo.";
+        estado.textContent =
+          "No se pudo cargar el catálogo.";
 
         catalogo.innerHTML = `
           <div class="sin-resultados">
@@ -440,17 +805,30 @@
     }
 
     talla.addEventListener("change", renderizar);
-    accesoAdmin.addEventListener("click", pedirAccesoAdmin);
+
+    accesoAdmin.addEventListener(
+      "click",
+      pedirAccesoAdmin
+    );
+
+    botonResurtir.addEventListener(
+      "click",
+      cambiarModoResurtir
+    );
 
     catalogo.addEventListener("click", evento => {
-      const imagen = evento.target.closest(".imagen-producto");
+      const imagen =
+        evento.target.closest(".imagen-producto");
 
       if (imagen) {
         abrirImagen(imagen.src, imagen.alt);
       }
     });
 
-    visorImagen.addEventListener("click", cerrarImagen);
+    visorImagen.addEventListener(
+      "click",
+      cerrarImagen
+    );
 
     document.addEventListener("keydown", evento => {
       if (evento.key === "Escape") {
@@ -458,7 +836,7 @@
       }
     });
 
-    actualizarModoAdmin();
+    actualizarControles();
     cargarCatalogo();
   </script>
 </body>
