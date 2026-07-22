@@ -4,16 +4,19 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo Tenis Natalia</title>
+
   <style>
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       background: #f4f4f4;
       font-family: Arial, sans-serif;
       color: #111;
     }
+
     header {
       position: sticky;
       top: 0;
@@ -23,11 +26,13 @@
       padding: 14px;
       box-shadow: 0 3px 10px rgba(0,0,0,.25);
     }
+
     h1 {
       margin: 0 0 12px;
       text-align: center;
       font-size: 22px;
     }
+
     .controles {
       max-width: 1100px;
       margin: auto;
@@ -35,19 +40,30 @@
       grid-template-columns: 1fr 1fr;
       gap: 8px;
     }
+
     select {
       width: 100%;
-      padding: 12px;
-      border: 0;
-      border-radius: 8px;
-      font-size: 16px;
+      min-height: 72px;
+      padding: 18px 16px;
+      border: 4px solid #ffe600;
+      border-radius: 16px;
+      background: #fff;
+      color: #111;
+      font-size: 20px;
+      font-weight: 900;
+      cursor: pointer;
+      box-shadow:
+        0 0 0 3px rgba(255,230,0,.18),
+        0 4px 12px rgba(0,0,0,.18);
     }
+
     #estado {
       max-width: 1100px;
       margin: 16px auto 0;
       padding: 0 12px;
       font-weight: bold;
     }
+
     #catalogo {
       max-width: 1100px;
       margin: 14px auto;
@@ -56,12 +72,14 @@
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
     }
+
     .producto {
       background: white;
       border-radius: 12px;
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,.12);
     }
+
     .producto img {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -69,24 +87,29 @@
       display: block;
       background: #eee;
     }
+
     .contenido {
       padding: 12px;
     }
+
     .nombre {
       margin: 0 0 7px;
       font-size: 16px;
       line-height: 1.25;
     }
+
     .existencias {
       margin-bottom: 10px;
       font-size: 13px;
       line-height: 1.5;
     }
+
     .tallas {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
+
     .talla {
       min-width: 42px;
       padding: 7px 6px;
@@ -97,15 +120,18 @@
       font-size: 13px;
       font-weight: bold;
     }
+
     .ultimo {
       background: #d40000;
     }
+
     .sin-resultados {
       grid-column: 1 / -1;
       text-align: center;
       padding: 50px 15px;
       font-size: 20px;
     }
+
     .boton-admin {
       width: 100%;
       padding: 12px;
@@ -117,12 +143,15 @@
       font-weight: bold;
       cursor: pointer;
     }
+
     .boton-admin.activo {
       background: #0a7a2f;
     }
+
     .imagen-producto {
       cursor: zoom-in;
     }
+
     .visor-imagen {
       position: fixed;
       inset: 0;
@@ -134,9 +163,11 @@
       background: rgba(0,0,0,.94);
       cursor: zoom-out;
     }
+
     .visor-imagen.abierto {
       display: flex;
     }
+
     .visor-imagen img {
       max-width: 96vw;
       max-height: 92vh;
@@ -144,6 +175,7 @@
       border-radius: 10px;
       box-shadow: 0 8px 35px rgba(0,0,0,.5);
     }
+
     .visor-ayuda {
       position: fixed;
       left: 0;
@@ -154,38 +186,55 @@
       font-size: 14px;
       pointer-events: none;
     }
+
     @media (max-width: 850px) {
       #catalogo {
         grid-template-columns: repeat(3, 1fr);
       }
     }
+
     @media (max-width: 650px) {
       .controles {
         grid-template-columns: 1fr;
       }
+
+      select {
+        min-height: 82px;
+        padding: 18px 12px;
+        border-width: 4px;
+        border-radius: 16px;
+        font-size: 18px;
+        font-weight: 900;
+      }
+
       #catalogo {
         grid-template-columns: repeat(2, 1fr);
         gap: 9px;
         padding: 0 8px 30px;
       }
+
       .contenido {
         padding: 9px;
       }
+
       .nombre {
         font-size: 14px;
       }
     }
   </style>
 </head>
+
 <body>
   <header>
     <h1>CATÁLOGO DE TENIS</h1>
+
     <div class="controles">
       <button id="accesoAdmin" class="boton-admin" type="button">
         🔒 Acceso privado
       </button>
+
       <select id="talla">
-        <option value="">Presiona aquí para seleccionar tu talla</option>
+        <option value="">👉 PRESIONA AQUÍ PARA SELECCIONAR TU TALLA</option>
         <option>22</option>
         <option>22.5</option>
         <option>23</option>
@@ -203,39 +252,51 @@
       </select>
     </div>
   </header>
+
   <div id="estado">Cargando catálogo...</div>
   <main id="catalogo"></main>
+
   <div id="visorImagen" class="visor-imagen" aria-hidden="true">
     <img id="imagenGrande" src="" alt="Imagen ampliada">
     <div class="visor-ayuda">Toca otra vez para cerrar</div>
   </div>
+
   <script>
     const API =
       "https://catalogo-backend-publico.onrender.com/api/catalogo";
+
     const CONTRASENA_ADMIN = "291118";
+
     let productos = [];
     let modoAdmin = false;
+
     const catalogo = document.getElementById("catalogo");
     const estado = document.getElementById("estado");
     const talla = document.getElementById("talla");
     const accesoAdmin = document.getElementById("accesoAdmin");
     const visorImagen = document.getElementById("visorImagen");
     const imagenGrande = document.getElementById("imagenGrande");
+
     function actualizarModoAdmin() {
       accesoAdmin.textContent = modoAdmin
         ? "🔓 Volver a tienda"
         : "🔒 Acceso privado";
+
       accesoAdmin.classList.toggle("activo", modoAdmin);
       renderizar();
     }
+
     function pedirAccesoAdmin() {
       if (modoAdmin) {
         modoAdmin = false;
         actualizarModoAdmin();
         return;
       }
+
       const clave = prompt("Escribe la contraseña:");
+
       if (clave === null) return;
+
       if (clave === CONTRASENA_ADMIN) {
         modoAdmin = true;
         actualizarModoAdmin();
@@ -243,74 +304,96 @@
         alert("Contraseña incorrecta");
       }
     }
+
     function abrirImagen(src, alt) {
       if (!src) return;
+
       imagenGrande.src = src;
       imagenGrande.alt = alt || "Imagen ampliada";
       visorImagen.classList.add("abierto");
       visorImagen.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
     }
+
     function cerrarImagen() {
       visorImagen.classList.remove("abierto");
       visorImagen.setAttribute("aria-hidden", "true");
       imagenGrande.src = "";
       document.body.style.overflow = "";
     }
+
     function limpiarTexto(texto) {
       return String(texto || "")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase();
     }
+
     function inventarioTalla(variante, almacen) {
       if (almacen === "shop_location") {
         return Number(variante.shop_location || 0);
       }
+
       if (almacen === "almacen_2") {
         return Number(variante.almacen_2 || 0);
       }
+
       return Number(variante.total || 0);
     }
+
     function renderizar() {
       const almacen = modoAdmin ? "almacen_2" : "shop_location";
       const tallaElegida = talla.value;
+
       const filtrados = productos
         .map(producto => {
           const tallasDisponibles = producto.tallas.filter(variante => {
-            const tieneInventario = inventarioTalla(variante, almacen) > 0;
+            const tieneInventario =
+              inventarioTalla(variante, almacen) > 0;
+
             const coincideTalla =
               !tallaElegida || variante.talla === tallaElegida;
+
             return tieneInventario && coincideTalla;
           });
+
           return {
             ...producto,
             tallasDisponibles
           };
         })
         .filter(producto => producto.tallasDisponibles.length > 0);
+
       estado.textContent =
         `${filtrados.length} modelos disponibles`;
+
       if (!filtrados.length) {
         catalogo.innerHTML =
           '<div class="sin-resultados">No encontramos productos disponibles.</div>';
         return;
       }
+
       catalogo.innerHTML = filtrados.map(producto => {
-        const tallasHTML = producto.tallasDisponibles.map(variante => {
-          const cantidad = inventarioTalla(variante, almacen);
-          const clase = cantidad === 1 ? "talla ultimo" : "talla";
-          return `
-            <span class="${clase}">
-              ${variante.talla}
-              <br>
-              <small>${cantidad}</small>
-            </span>
-          `;
-        }).join("");
+        const tallasHTML = producto.tallasDisponibles
+          .map(variante => {
+            const cantidad = inventarioTalla(variante, almacen);
+            const clase =
+              cantidad === 1 ? "talla ultimo" : "talla";
+
+            return `
+              <span class="${clase}">
+                ${variante.talla}
+                <br>
+                <small>${cantidad}</small>
+              </span>
+            `;
+          })
+          .join("");
+
         const inventarioVisible = modoAdmin
           ? `Almacén 2: ${producto.almacen_2}`
           : `Shop location: ${producto.shop_location}`;
+
         return `
           <article class="producto">
             <img
@@ -320,6 +403,7 @@
               loading="lazy"
               onerror="this.src='https://placehold.co/600x600?text=Sin+imagen'"
             >
+
             <div class="contenido">
               <h2 class="nombre">${producto.nombre}</h2>
               <div class="existencias">${inventarioVisible}</div>
@@ -329,18 +413,24 @@
         `;
       }).join("");
     }
+
     async function cargarCatalogo() {
       try {
         const respuesta = await fetch(API);
+
         if (!respuesta.ok) {
           throw new Error(`Error ${respuesta.status}`);
         }
+
         const datos = await respuesta.json();
         productos = datos.productos || [];
+
         renderizar();
       } catch (error) {
         console.error(error);
+
         estado.textContent = "No se pudo cargar el catálogo.";
+
         catalogo.innerHTML = `
           <div class="sin-resultados">
             Revisa que el servidor siga activo.
@@ -348,16 +438,26 @@
         `;
       }
     }
+
     talla.addEventListener("change", renderizar);
     accesoAdmin.addEventListener("click", pedirAccesoAdmin);
+
     catalogo.addEventListener("click", evento => {
       const imagen = evento.target.closest(".imagen-producto");
-      if (imagen) abrirImagen(imagen.src, imagen.alt);
+
+      if (imagen) {
+        abrirImagen(imagen.src, imagen.alt);
+      }
     });
+
     visorImagen.addEventListener("click", cerrarImagen);
+
     document.addEventListener("keydown", evento => {
-      if (evento.key === "Escape") cerrarImagen();
+      if (evento.key === "Escape") {
+        cerrarImagen();
+      }
     });
+
     actualizarModoAdmin();
     cargarCatalogo();
   </script>
