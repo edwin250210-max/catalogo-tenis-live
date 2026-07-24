@@ -1,22 +1,22 @@
+Sí bro. Aquí está completo, listo para reemplazar todo tu index.html. La barra roja siempre permanecerá abajo mientras deslizas y no tapará los últimos productos.
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catálogo Tenis Natalia</title>
-
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
+      padding-bottom: 105px;
       background: #f4f4f4;
       font-family: Arial, sans-serif;
       color: #111;
     }
-
     header {
       position: sticky;
       top: 0;
@@ -26,13 +26,11 @@
       padding: 14px;
       box-shadow: 0 3px 10px rgba(0,0,0,.25);
     }
-
     h1 {
       margin: 0 0 12px;
       text-align: center;
       font-size: 22px;
     }
-
     .controles {
       max-width: 1100px;
       margin: auto;
@@ -40,7 +38,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 8px;
     }
-
     select {
       width: 100%;
       min-height: 72px;
@@ -56,14 +53,12 @@
         0 0 0 3px rgba(255,230,0,.18),
         0 4px 12px rgba(0,0,0,.18);
     }
-
     #estado {
       max-width: 1100px;
       margin: 16px auto 0;
       padding: 0 12px;
       font-weight: bold;
     }
-
     #catalogo {
       max-width: 1100px;
       margin: 14px auto;
@@ -72,7 +67,6 @@
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
     }
-
     .producto {
       min-width: 0;
       background: white;
@@ -80,11 +74,9 @@
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,.12);
     }
-
     .producto.resurtido {
       border: 3px solid #ff9800;
     }
-
     .producto img {
       width: 100%;
       aspect-ratio: 1 / 1;
@@ -92,30 +84,25 @@
       display: block;
       background: #eee;
     }
-
     .contenido {
       padding: 12px;
     }
-
     .nombre {
       margin: 0 0 7px;
       font-size: 16px;
       line-height: 1.25;
       overflow-wrap: anywhere;
     }
-
     .existencias {
       margin-bottom: 10px;
       font-size: 13px;
       line-height: 1.5;
     }
-
     .tallas {
       display: flex;
       flex-wrap: wrap;
       gap: 6px;
     }
-
     .talla {
       min-width: 42px;
       padding: 7px 6px;
@@ -126,18 +113,15 @@
       font-size: 13px;
       font-weight: bold;
     }
-
     .ultimo {
       background: #d40000;
     }
-
     .sin-resultados {
       grid-column: 1 / -1;
       text-align: center;
       padding: 50px 15px;
       font-size: 20px;
     }
-
     .boton-admin,
     .boton-resurtir {
       width: 100%;
@@ -150,32 +134,25 @@
       font-weight: bold;
       cursor: pointer;
     }
-
     .boton-admin {
       background: #222;
     }
-
     .boton-admin.activo {
       background: #0a7a2f;
     }
-
     .boton-resurtir {
       background: #d95f00;
     }
-
     .boton-resurtir.activo {
       background: #d40000;
       box-shadow: 0 0 0 3px rgba(255,255,255,.3);
     }
-
     .boton-resurtir[hidden] {
       display: none;
     }
-
     .imagen-producto {
       cursor: zoom-in;
     }
-
     .visor-imagen {
       position: fixed;
       inset: 0;
@@ -187,11 +164,9 @@
       background: rgba(0,0,0,.94);
       cursor: zoom-out;
     }
-
     .visor-imagen.abierto {
       display: flex;
     }
-
     .visor-imagen img {
       max-width: 96vw;
       max-height: 92vh;
@@ -199,7 +174,6 @@
       border-radius: 10px;
       box-shadow: 0 8px 35px rgba(0,0,0,.5);
     }
-
     .visor-ayuda {
       position: fixed;
       left: 0;
@@ -210,7 +184,6 @@
       font-size: 14px;
       pointer-events: none;
     }
-
     .encabezado-resurtido {
       margin-bottom: 10px;
       padding: 9px;
@@ -221,13 +194,11 @@
       font-size: 14px;
       font-weight: 900;
     }
-
     .lista-resurtido {
       display: flex;
       flex-direction: column;
       gap: 8px;
     }
-
     .fila-resurtido {
       display: grid;
       grid-template-columns: .7fr 1fr 1fr 1fr;
@@ -240,29 +211,24 @@
       text-align: center;
       font-size: 12px;
     }
-
     .fila-resurtido.encabezados {
       background: #111;
       color: #fff;
       font-size: 10px;
       font-weight: bold;
     }
-
     .numero-talla {
       font-size: 15px;
       font-weight: 900;
     }
-
     .shop-cero {
       color: #d40000;
       font-weight: 900;
     }
-
     .shop-bajo {
       color: #d95f00;
       font-weight: 900;
     }
-
     .mandar {
       padding: 5px 3px;
       border-radius: 6px;
@@ -271,7 +237,6 @@
       font-size: 14px;
       font-weight: 900;
     }
-
     .resumen-modelo {
       margin-top: 10px;
       padding: 8px;
@@ -282,33 +247,53 @@
       font-size: 14px;
       font-weight: 900;
     }
-
+    /* BARRA FIJA DE LA PROMOCIÓN */
+    .aviso-oferta {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 9000;
+      width: 100%;
+      padding: 14px 12px;
+      border-top: 3px solid #ff4b4b;
+      background: #e00000;
+      color: #fff;
+      box-shadow: 0 -4px 16px rgba(0,0,0,.35);
+      text-align: center;
+      font-size: 19px;
+      font-weight: 900;
+      line-height: 1.25;
+      text-transform: uppercase;
+    }
+    .aviso-oferta strong {
+      font-size: 22px;
+      white-space: nowrap;
+    }
     @media (max-width: 850px) {
       #catalogo {
         grid-template-columns: repeat(3, minmax(0, 1fr));
       }
     }
-
     @media (max-width: 650px) {
+      body {
+        padding-bottom: 118px;
+      }
       header {
         padding: 12px 10px;
       }
-
       h1 {
         margin-bottom: 10px;
         font-size: 20px;
       }
-
       .controles {
         grid-template-columns: 1fr;
       }
-
       select,
       .boton-admin,
       .boton-resurtir {
         min-height: 72px;
       }
-
       select {
         padding: 18px 12px;
         border-width: 4px;
@@ -316,65 +301,53 @@
         font-size: 18px;
         font-weight: 900;
       }
-
       #estado {
         margin-top: 14px;
         padding: 0 8px;
         font-size: 15px;
       }
-
       #catalogo {
         grid-template-columns: repeat(3, minmax(0, 1fr));
         gap: 7px;
         margin-top: 12px;
         padding: 0 6px 30px;
       }
-
       .producto {
         border-radius: 9px;
       }
-
       .contenido {
         padding: 7px;
       }
-
       .nombre {
         margin-bottom: 5px;
         font-size: 11px;
         line-height: 1.15;
       }
-
       .existencias {
         margin-bottom: 7px;
         font-size: 10px;
         line-height: 1.3;
       }
-
       .tallas {
         gap: 4px;
       }
-
       .talla {
         min-width: 34px;
         padding: 5px 4px;
         border-radius: 6px;
         font-size: 11px;
       }
-
       .talla small {
         font-size: 9px;
       }
-
       .encabezado-resurtido {
         margin-bottom: 6px;
         padding: 6px 3px;
         font-size: 10px;
       }
-
       .lista-resurtido {
         gap: 5px;
       }
-
       .fila-resurtido {
         grid-template-columns: .7fr 1fr 1fr 1fr;
         gap: 2px;
@@ -382,82 +355,84 @@
         border-radius: 5px;
         font-size: 9px;
       }
-
       .fila-resurtido.encabezados {
         font-size: 7px;
       }
-
       .numero-talla {
         font-size: 10px;
       }
-
       .mandar {
         padding: 4px 1px;
         border-radius: 4px;
         font-size: 10px;
       }
-
       .resumen-modelo {
         margin-top: 6px;
         padding: 6px 3px;
         font-size: 10px;
       }
+      .aviso-oferta {
+        padding: 13px 8px;
+        font-size: 15px;
+        line-height: 1.3;
+      }
+      .aviso-oferta strong {
+        font-size: 20px;
+      }
     }
-
     @media (max-width: 360px) {
+      body {
+        padding-bottom: 125px;
+      }
       #catalogo {
         grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 8px;
         padding-left: 7px;
         padding-right: 7px;
       }
-
       .contenido {
         padding: 8px;
       }
-
       .nombre {
         font-size: 13px;
       }
-
       .existencias {
         font-size: 11px;
       }
-
       .talla {
         min-width: 37px;
         font-size: 12px;
       }
-
       .talla small {
         font-size: 10px;
       }
-
       .fila-resurtido {
         font-size: 10px;
       }
-
       .fila-resurtido.encabezados {
         font-size: 8px;
       }
-
       .numero-talla,
       .mandar {
         font-size: 11px;
       }
+      .aviso-oferta {
+        padding: 12px 7px;
+        font-size: 14px;
+      }
+      .aviso-oferta strong {
+        font-size: 19px;
+      }
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1 id="tituloCatalogo">CATÁLOGO DE TENIS</h1>
-
     <div class="controles">
       <button id="accesoAdmin" class="boton-admin" type="button">
         🔒 Acceso privado
       </button>
-
       <button
         id="botonResurtir"
         class="boton-resurtir"
@@ -466,7 +441,6 @@
       >
         🚨 Resurtir Shop
       </button>
-
       <select id="talla">
         <option value="">👉 PRESIONA AQUÍ PARA SELECCIONAR TU TALLA</option>
         <option>22</option>
@@ -486,36 +460,31 @@
       </select>
     </div>
   </header>
-
   <div id="estado">Cargando catálogo...</div>
   <main id="catalogo"></main>
-
   <div id="visorImagen" class="visor-imagen" aria-hidden="true">
     <img id="imagenGrande" src="" alt="Imagen ampliada">
     <div class="visor-ayuda">Toca otra vez para cerrar</div>
   </div>
-
+  <div class="aviso-oferta">
+    SOLO LOS PARES MARCADOS CON ETIQUETA DE OFERTA ESPECIAL
+    APLICAN PARA LA PROMO DE <strong>2X$600</strong>
+  </div>
   <script>
     const API =
       "https://catalogo-backend-publico.onrender.com/api/catalogo";
-
     const CONTRASENA_ADMIN = "291118";
-
     /*
       Cantidad objetivo para Shop location.
-
       Si Shop tiene 0 y Almacén 2 tiene suficiente:
       manda 1.
-
       Si Shop tiene 1:
       no manda nada.
     */
     const OBJETIVO_SHOP = 1;
-
     let productos = [];
     let modoAdmin = false;
     let modoResurtir = false;
-
     const catalogo = document.getElementById("catalogo");
     const estado = document.getElementById("estado");
     const talla = document.getElementById("talla");
@@ -524,53 +493,38 @@
     const tituloCatalogo = document.getElementById("tituloCatalogo");
     const visorImagen = document.getElementById("visorImagen");
     const imagenGrande = document.getElementById("imagenGrande");
-
     function numeroSeguro(valor) {
       const numero = Number(valor || 0);
-
       if (!Number.isFinite(numero)) {
         return 0;
       }
-
       return Math.max(0, numero);
     }
-
     function inventarioTalla(variante, almacen) {
       if (almacen === "shop_location") {
         return numeroSeguro(variante.shop_location);
       }
-
       if (almacen === "almacen_2") {
         return numeroSeguro(variante.almacen_2);
       }
-
       return numeroSeguro(variante.total);
     }
-
     function calcularCantidadParaMandar(variante) {
       const shop = inventarioTalla(variante, "shop_location");
       const almacen2 = inventarioTalla(variante, "almacen_2");
-
       const faltante = Math.max(0, OBJETIVO_SHOP - shop);
-
       return Math.min(faltante, almacen2);
     }
-
     function actualizarControles() {
       accesoAdmin.textContent = modoAdmin
         ? "🔓 Volver a tienda"
         : "🔒 Acceso privado";
-
       accesoAdmin.classList.toggle("activo", modoAdmin);
-
       botonResurtir.hidden = !modoAdmin;
-
       botonResurtir.textContent = modoResurtir
         ? "📦 Ver catálogo Almacén 2"
         : "🚨 Resurtir Shop";
-
       botonResurtir.classList.toggle("activo", modoResurtir);
-
       if (modoResurtir) {
         tituloCatalogo.textContent = "🚨 RESURTIR SHOP";
       } else if (modoAdmin) {
@@ -578,10 +532,8 @@
       } else {
         tituloCatalogo.textContent = "CATÁLOGO DE TENIS";
       }
-
       renderizar();
     }
-
     function pedirAccesoAdmin() {
       if (modoAdmin) {
         modoAdmin = false;
@@ -590,11 +542,8 @@
         actualizarControles();
         return;
       }
-
       const clave = prompt("Escribe la contraseña:");
-
       if (clave === null) return;
-
       if (clave === CONTRASENA_ADMIN) {
         modoAdmin = true;
         modoResurtir = false;
@@ -604,75 +553,59 @@
         alert("Contraseña incorrecta");
       }
     }
-
     function cambiarModoResurtir() {
       if (!modoAdmin) return;
-
       modoResurtir = !modoResurtir;
       talla.value = "";
       actualizarControles();
     }
-
     function abrirImagen(src, alt) {
       if (!src) return;
-
       imagenGrande.src = src;
       imagenGrande.alt = alt || "Imagen ampliada";
       visorImagen.classList.add("abierto");
       visorImagen.setAttribute("aria-hidden", "false");
       document.body.style.overflow = "hidden";
     }
-
     function cerrarImagen() {
       visorImagen.classList.remove("abierto");
       visorImagen.setAttribute("aria-hidden", "true");
       imagenGrande.src = "";
       document.body.style.overflow = "";
     }
-
     function renderizar() {
       if (modoAdmin && modoResurtir) {
         renderizarResurtido();
         return;
       }
-
       renderizarCatalogoNormal();
     }
-
     function renderizarCatalogoNormal() {
       const almacen = modoAdmin
         ? "almacen_2"
         : "shop_location";
-
       const tallaElegida = talla.value;
-
       const filtrados = productos
         .map(producto => {
           const variantes = Array.isArray(producto.tallas)
             ? producto.tallas
             : [];
-
           const tallasDisponibles = variantes.filter(variante => {
             const tieneInventario =
               inventarioTalla(variante, almacen) > 0;
-
             const coincideTalla =
               !tallaElegida ||
               String(variante.talla) === tallaElegida;
-
             return tieneInventario && coincideTalla;
           });
-
           return {
             ...producto,
             tallasDisponibles
           };
         })
         .filter(producto => producto.tallasDisponibles.length > 0);
-
       estado.textContent =
         `${filtrados.length} modelos disponibles`;
-
       if (!filtrados.length) {
         catalogo.innerHTML = `
           <div class="sin-resultados">
@@ -681,18 +614,15 @@
         `;
         return;
       }
-
       catalogo.innerHTML = filtrados.map(producto => {
         const tallasHTML = producto.tallasDisponibles
           .map(variante => {
             const cantidad =
               inventarioTalla(variante, almacen);
-
             const clase =
               cantidad === 1
                 ? "talla ultimo"
                 : "talla";
-
             return `
               <span class="${clase}">
                 ${variante.talla}
@@ -702,11 +632,9 @@
             `;
           })
           .join("");
-
         const inventarioVisible = modoAdmin
           ? `Almacén 2: ${numeroSeguro(producto.almacen_2)}`
           : `Shop location: ${numeroSeguro(producto.shop_location)}`;
-
         return `
           <article class="producto">
             <img
@@ -716,16 +644,13 @@
               loading="lazy"
               onerror="this.src='https://placehold.co/600x600?text=Sin+imagen'"
             >
-
             <div class="contenido">
               <h2 class="nombre">
                 ${producto.nombre || "Producto sin nombre"}
               </h2>
-
               <div class="existencias">
                 ${inventarioVisible}
               </div>
-
               <div class="tallas">
                 ${tallasHTML}
               </div>
@@ -734,27 +659,21 @@
         `;
       }).join("");
     }
-
     function renderizarResurtido() {
       const tallaElegida = talla.value;
-
       const productosParaResurtir = productos
         .map(producto => {
           const variantes = Array.isArray(producto.tallas)
             ? producto.tallas
             : [];
-
           const tallasParaResurtir = variantes
             .map(variante => {
               const shop =
                 inventarioTalla(variante, "shop_location");
-
               const almacen2 =
                 inventarioTalla(variante, "almacen_2");
-
               const mandar =
                 calcularCantidadParaMandar(variante);
-
               return {
                 ...variante,
                 shop,
@@ -766,15 +685,12 @@
               const coincideTalla =
                 !tallaElegida ||
                 String(variante.talla) === tallaElegida;
-
               return variante.mandar > 0 && coincideTalla;
             });
-
           const totalMandar = tallasParaResurtir.reduce(
             (suma, variante) => suma + variante.mandar,
             0
           );
-
           return {
             ...producto,
             tallasParaResurtir,
@@ -786,29 +702,24 @@
           if (b.totalMandar !== a.totalMandar) {
             return b.totalMandar - a.totalMandar;
           }
-
           return String(a.nombre || "").localeCompare(
             String(b.nombre || ""),
             "es"
           );
         });
-
       const totalPares = productosParaResurtir.reduce(
         (suma, producto) => suma + producto.totalMandar,
         0
       );
-
       const totalTallas = productosParaResurtir.reduce(
         (suma, producto) =>
           suma + producto.tallasParaResurtir.length,
         0
       );
-
       estado.textContent =
         `${productosParaResurtir.length} modelos · ` +
         `${totalTallas} tallas · ` +
         `${totalPares} pares para mandar a Shop`;
-
       if (!productosParaResurtir.length) {
         catalogo.innerHTML = `
           <div class="sin-resultados">
@@ -818,7 +729,6 @@
         `;
         return;
       }
-
       catalogo.innerHTML = productosParaResurtir
         .map(producto => {
           const filas = producto.tallasParaResurtir
@@ -827,21 +737,17 @@
                 variante.shop === 0
                   ? "shop-cero"
                   : "shop-bajo";
-
               return `
                 <div class="fila-resurtido">
                   <div class="numero-talla">
                     ${variante.talla}
                   </div>
-
                   <div class="${claseShop}">
                     ${variante.shop}
                   </div>
-
                   <div>
                     ${variante.almacen2}
                   </div>
-
                   <div class="mandar">
                     ${variante.mandar}
                   </div>
@@ -849,7 +755,6 @@
               `;
             })
             .join("");
-
           return `
             <article class="producto resurtido">
               <img
@@ -859,16 +764,13 @@
                 loading="lazy"
                 onerror="this.src='https://placehold.co/600x600?text=Sin+imagen'"
               >
-
               <div class="contenido">
                 <h2 class="nombre">
                   ${producto.nombre || "Producto sin nombre"}
                 </h2>
-
                 <div class="encabezado-resurtido">
                   Necesita surtido
                 </div>
-
                 <div class="lista-resurtido">
                   <div class="fila-resurtido encabezados">
                     <div>Talla</div>
@@ -876,10 +778,8 @@
                     <div>Alm. 2</div>
                     <div>Mandar</div>
                   </div>
-
                   ${filas}
                 </div>
-
                 <div class="resumen-modelo">
                   Mandar ${producto.totalMandar}
                   ${producto.totalMandar === 1 ? "par" : "pares"}
@@ -890,30 +790,23 @@
         })
         .join("");
     }
-
     async function cargarCatalogo() {
       try {
         const respuesta = await fetch(API, {
           cache: "no-store"
         });
-
         if (!respuesta.ok) {
           throw new Error(`Error ${respuesta.status}`);
         }
-
         const datos = await respuesta.json();
-
         productos = Array.isArray(datos.productos)
           ? datos.productos
           : [];
-
         renderizar();
       } catch (error) {
         console.error(error);
-
         estado.textContent =
           "No se pudo cargar el catálogo.";
-
         catalogo.innerHTML = `
           <div class="sin-resultados">
             Revisa que el servidor siga activo.
@@ -921,39 +814,31 @@
         `;
       }
     }
-
     talla.addEventListener("change", renderizar);
-
     accesoAdmin.addEventListener(
       "click",
       pedirAccesoAdmin
     );
-
     botonResurtir.addEventListener(
       "click",
       cambiarModoResurtir
     );
-
     catalogo.addEventListener("click", evento => {
       const imagen =
         evento.target.closest(".imagen-producto");
-
       if (imagen) {
         abrirImagen(imagen.src, imagen.alt);
       }
     });
-
     visorImagen.addEventListener(
       "click",
       cerrarImagen
     );
-
     document.addEventListener("keydown", evento => {
       if (evento.key === "Escape") {
         cerrarImagen();
       }
     });
-
     actualizarControles();
     cargarCatalogo();
   </script>
