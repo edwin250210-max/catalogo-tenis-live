@@ -817,44 +817,63 @@ header{padding:12px 12px 14px}header h1{margin-bottom:10px;font-size:18px;letter
 }
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 </style>
-<style id="negro-dorado">
-:root{--oro:#d0ad5b;--oro-claro:#f0d98f;--tinta:#f3eee3;--papel:#090908;--borde:#4b3c1c}
-body{color:#f3eee3;background:radial-gradient(ellipse at 50% 0%,#201a0c 0,transparent 32rem),#090908}
-header{background:#050505;border-bottom:2px solid #c6a24f;box-shadow:0 6px 24px #000b}
-header h1{color:#e2c46f}
-select{border-color:#b99542;background:#f8f4e9;color:#1b180f}
-.boton-admin,.boton-resurtir{border-color:#b99542}
-.boton-admin{background:#17150f;color:#eddaa1}
-.boton-admin.activo{background:#263321;border-color:#9fb178}
-.boton-resurtir{background:linear-gradient(135deg,#9b762d,#624812);color:#fff3cb}
-.hero-natalia{background:linear-gradient(112deg,#050505 0%,#0e0d0a 58%,#261d0c 100%)}
-.hero-natalia::after{border-color:#d1ac5855;box-shadow:0 0 0 35px #d1ac5813,0 0 0 70px #d1ac5809}
-.hero-sobrelinea,.catalogo-intro span{color:#d9bb6b}
-.hero-natalia h2{color:#fff7dc}
-.hero-boton-natalia{border-color:#d0ad5b;color:#f0d98f}
-.hero-boton-natalia:hover,.hero-boton-natalia:focus{background:#d0ad5b;color:#111}
-.catalogo-intro{color:#e9dfc5}
-.catalogo-intro h2{color:#e4c56f}
-#estado{border-color:#705a25;border-left-color:#d0ad5b;background:#15130e;color:#f1e7cf;box-shadow:0 4px 16px #0008}
-.producto{border-color:#55451f;background:linear-gradient(160deg,#1a1812,#0e0e0c);box-shadow:0 7px 22px #0009}
-.producto::before{background:linear-gradient(90deg,#8e6b25,#f0d98f,#9f792e)}
-.producto:hover{box-shadow:0 12px 28px #000b,0 0 0 1px #d0ad5b}
-.producto.resurtido{border-color:#d29b45;background:#21190d}
-.producto img{background:#eee8d9}
-.nombre{color:#f3d989}
-.existencias{color:#d0c6ad}
-.talla{border-color:#b89547;background:linear-gradient(145deg,#252014,#13120e);color:#f2d987;box-shadow:inset 0 0 0 1px #d0ad5b22}
-.talla:hover,.talla:focus{background:#d0ad5b;color:#111}
-.ultimo{border-color:#b74840;background:#84352f;color:#fff}
-.sin-resultados{border-color:#705a25;background:#14120e;color:#efe7d7}
-.visor-imagen{background:#000f}.visor-imagen img{border-color:#d0ad5b}.visor-ayuda{color:#f0d98f}
-.encabezado-resurtido{border-color:#d0ad5b;background:#2a2110;color:#f0d98f}
-.fila-resurtido{border-color:#4b3c1c;background:#15130f;color:#f1ead9}
-.fila-resurtido.encabezados{border-color:#b99542;background:linear-gradient(100deg,#594416,#251e10);color:#ffe8a6}
-.numero-talla{color:#f0d98f}.shop-cero{color:#ff7777}.shop-bajo{color:#ffc267}
-.mandar{background:linear-gradient(135deg,#47603d,#293b24);color:#f1f7df}
-.resumen-modelo{border-color:#9b7b36;background:#28200e;color:#f0d98f}
-@media(max-width:650px){.catalogo-intro{padding-top:28px}#catalogo{padding-bottom:34px}}
+<style id="beige-dorado-3">
+:root{--oro:#bd984a;--oro-oscuro:#8a6b2d;--tinta:#25221c;--papel:#fbfaf6;--borde:#e9dfc9}
+html{scroll-behavior:smooth}
+body{color:#25221c;background:radial-gradient(ellipse at 82% 0%,#f0e7d4 0,transparent 28rem),#fbfaf6}
+header{position:relative;top:auto;padding:15px 20px 17px;background:#fffefa;color:#29251d;border:0;border-bottom:1px solid #cfb36f;box-shadow:0 4px 16px #4e3e180d}
+header::before{display:none}
+header h1{margin:0 auto 13px;max-width:1180px;color:#3b3324;text-align:left;font-size:21px;font-weight:800;letter-spacing:3px;text-shadow:none}
+.controles{max-width:1180px;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+select{min-height:48px;padding:11px 13px;border:1px solid #cbb477;border-radius:3px;background:#fff;color:#25221d;font-size:15px;font-weight:600;box-shadow:none}
+.boton-admin,.boton-resurtir{min-height:48px;padding:10px 12px;border:1px solid #b99859;border-radius:3px;font-size:13px;box-shadow:none}
+.boton-admin{background:#332e24;color:#f4e7c4}.boton-admin.activo{background:#49603c;border-color:#9eb277}
+.boton-resurtir{background:linear-gradient(135deg,#b99859,#8d6b2d);color:#fff}
+.boton-resurtir.activo{background:#a9473c;border-color:#c8766c}
+.boton-admin:hover,.boton-resurtir:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.hero-natalia{position:relative;overflow:hidden;color:#28241c;background:linear-gradient(115deg,#fffefa 0%,#f8f4ea 58%,#eee4ce 100%)}
+.hero-natalia::after{position:absolute;top:-145px;right:-90px;width:410px;height:410px;border:1px solid #bd984a55;border-radius:50%;box-shadow:0 0 0 35px #bd984a12,0 0 0 70px #bd984a08;content:"";pointer-events:none}
+.hero-contenido-natalia{position:relative;z-index:1;max-width:1180px;margin:auto;padding:58px 22px 54px}
+.hero-sobrelinea{color:#98763b;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase}
+.hero-natalia h2{max-width:650px;margin:13px 0 12px;color:#28241c;font-family:Georgia,"Times New Roman",serif;font-size:clamp(36px,5vw,54px);font-weight:400;line-height:1.05}
+.hero-natalia p{max-width:510px;margin:0;color:#6f6859;font-size:15px;line-height:1.65}
+.hero-boton-natalia{display:inline-block;margin-top:23px;padding:13px 20px;border:1px solid #ae8a40;border-radius:2px;background:#fffdf8;color:#755b27;font-size:12px;font-weight:bold;letter-spacing:1.3px;text-decoration:none;text-transform:uppercase}
+.hero-boton-natalia:hover,.hero-boton-natalia:focus{background:#b99859;color:#fff}
+.catalogo-intro{max-width:1180px;margin:0 auto;padding:34px 22px 0}
+.catalogo-intro span{color:#98763b;font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase}
+.catalogo-intro h2{margin:8px 0 4px;color:#29251d;font-family:Georgia,"Times New Roman",serif;font-size:34px;font-weight:400}
+#estado{width:max-content;max-width:calc(100% - 28px);margin:15px auto 17px;padding:8px 13px;border:1px solid #e4dac2;border-left:4px solid #bd984a;border-radius:2px;background:#fffefa;color:#625b4e;font-size:13px;box-shadow:0 3px 12px #4a3a170a}
+#catalogo{max-width:1180px;gap:15px;padding:0 14px 45px}
+.producto{border:1px solid #e4dac2;border-radius:4px;background:#fff;box-shadow:0 5px 18px #4a3a170c;transition:transform .18s ease,box-shadow .18s ease}
+.producto::before{height:3px;background:linear-gradient(90deg,#a98539,#e2cb8f,#a98539)}
+.producto:hover{transform:translateY(-3px);box-shadow:0 10px 23px #4a3a1718}
+.producto.resurtido{border:2px solid #c89045;background:#fffaf0}
+.producto.resurtido::before{background:linear-gradient(90deg,#d6a044,#b74d39)}
+.producto img{margin-top:3px;background:#f5f2eb;object-fit:contain}
+.contenido{padding:13px}.nombre{color:#302a1d;font-size:14px;font-weight:700}.existencias{color:#81785f;font-size:12px;font-weight:600}
+.talla{min-width:43px;min-height:38px;border:1px solid #d4bd83;border-radius:3px;background:#fcfaf5;color:#58451d;box-shadow:none}
+.ultimo{border-color:#c66a5d;background:#a84b42;color:#fff}
+.sin-resultados{border:1px solid #e4dac2;border-radius:3px;background:#fff;color:#615b50}
+.visor-imagen{background:#000e}.visor-imagen img{border:2px solid #d0ad5b;border-radius:2px}.visor-ayuda{color:#fff7df}
+.encabezado-resurtido{border:1px solid #d6b96f;border-radius:3px;background:#f8f1e2;color:#8b6330}
+.fila-resurtido{border-color:#e4dac2;border-radius:3px;background:#fff;color:#25221c}
+.fila-resurtido.encabezados{border-color:#8d6b2d;background:linear-gradient(100deg,#705724,#9a7938);color:#fff}
+.numero-talla{color:#8b6330}.shop-cero{color:#b84036}.shop-bajo{color:#b56722}
+.mandar{border-radius:3px;background:#49603c;color:#fff}
+.resumen-modelo{border:1px solid #dcc995;border-radius:3px;background:#f8f3e8;color:#594822}
+body.modo-privado .hero-natalia,body.modo-privado .catalogo-intro{display:none}
+@media(max-width:850px){#catalogo{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:650px){
+header{padding:12px 12px 14px}header h1{margin-bottom:10px;font-size:18px;letter-spacing:2px}
+.controles{grid-template-columns:1fr;gap:7px}select,.boton-admin,.boton-resurtir{min-height:47px}select{padding:10px 12px;font-size:15px}
+.hero-contenido-natalia{padding:45px 18px 40px}.hero-natalia h2{max-width:430px;font-size:39px}.hero-natalia p{max-width:390px;font-size:14px}.hero-natalia::after{top:-110px;right:-260px}
+.catalogo-intro{padding:28px 14px 0}.catalogo-intro h2{font-size:29px}
+#estado{margin-top:13px;padding:8px 11px;font-size:12px}#catalogo{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;padding:0 6px 30px}
+.producto{border-radius:4px}.contenido{padding:7px}.nombre{font-size:11px;line-height:1.15}.existencias{margin-bottom:6px;font-size:9px;line-height:1.25}
+.tallas{gap:3px}.talla{min-width:30px;min-height:31px;padding:3px;font-size:9px}.talla small{font-size:8px}.encabezado-resurtido{font-size:9px}
+}
+@media(max-width:360px){#catalogo{grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;padding-right:5px;padding-left:5px}.contenido{padding:6px}.nombre{font-size:10px}.existencias{font-size:8px}.talla{min-width:28px;min-height:29px;font-size:8px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
 </style>
 </head>
 <body>
