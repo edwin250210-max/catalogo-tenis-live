@@ -761,6 +761,101 @@
     .fila-resurtido.encabezados { background: linear-gradient(100deg, rgba(7, 86, 174, .96), rgba(8, 121, 168, .96)); }
     .resumen-modelo { background: rgba(16, 41, 74, .94); }
   </style>
+<style id="estilo-aila">
+:root{--oro:#b99859;--oro-oscuro:#98763b;--tinta:#191713;--papel:#f7f5f1;--borde:#e8e2d8}
+html{scroll-behavior:smooth}
+body{color:var(--tinta);background:radial-gradient(ellipse at 85% 5%,#e9dfca 0,transparent 25rem),var(--papel);font-family:Arial,Helvetica,sans-serif}
+header{position:relative;top:auto;padding:15px 20px 17px;background:#11100e;color:#fff;border:0;border-bottom:1px solid var(--oro);box-shadow:0 5px 18px #20180b22}
+header::before{display:none}
+header h1{margin:0 auto 13px;max-width:1180px;color:#e0c27d;text-align:left;font-size:21px;font-weight:800;letter-spacing:3px;text-shadow:none}
+.controles{max-width:1180px;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+select{min-height:48px;padding:11px 13px;border:1px solid #ded9cf;border-radius:3px;background:#fff;color:#25221d;font-size:15px;font-weight:600;box-shadow:none}
+.boton-admin,.boton-resurtir{min-height:48px;padding:10px 12px;border:1px solid #b99859;border-radius:3px;font-size:13px;box-shadow:none}
+.boton-admin{background:#24211b}.boton-admin.activo{background:#46613e;border-color:#8fa779}
+.boton-resurtir{background:#8b6330}.boton-resurtir.activo{background:#a63c3c;border-color:#cc7777}
+.boton-admin:hover,.boton-resurtir:hover{filter:brightness(1.12);transform:translateY(-1px)}
+.hero-natalia{position:relative;overflow:hidden;color:#fff;background:linear-gradient(115deg,#171511 0%,#242016 58%,#44381f 100%)}
+.hero-natalia::after{position:absolute;top:-145px;right:-90px;width:410px;height:410px;border:1px solid #b9985944;border-radius:50%;box-shadow:0 0 0 35px #b9985910,0 0 0 70px #b998590a;content:"";pointer-events:none}
+.hero-contenido-natalia{position:relative;z-index:1;max-width:1180px;margin:auto;padding:58px 22px 54px}
+.hero-sobrelinea{color:#dec17d;font-size:11px;font-weight:bold;letter-spacing:3px;text-transform:uppercase}
+.hero-natalia h2{max-width:650px;margin:13px 0 12px;color:#fff;font-family:Georgia,"Times New Roman",serif;font-size:clamp(36px,5vw,54px);font-weight:400;line-height:1.05}
+.hero-natalia p{max-width:510px;margin:0;color:#dedbd3;font-size:15px;line-height:1.65}
+.hero-boton-natalia{display:inline-block;margin-top:23px;padding:13px 20px;border:1px solid #d6b96f;border-radius:2px;color:#f0d58f;font-size:12px;font-weight:bold;letter-spacing:1.3px;text-decoration:none;text-transform:uppercase}
+.hero-boton-natalia:hover,.hero-boton-natalia:focus{background:#d6b96f;color:#171511}
+.catalogo-intro{max-width:1180px;margin:0 auto;padding:34px 22px 0}
+.catalogo-intro span{color:var(--oro-oscuro);font-size:11px;font-weight:bold;letter-spacing:2.5px;text-transform:uppercase}
+.catalogo-intro h2{margin:8px 0 4px;color:var(--tinta);font-family:Georgia,"Times New Roman",serif;font-size:34px;font-weight:400}
+#estado{width:max-content;max-width:calc(100% - 28px);margin:15px auto 17px;padding:8px 13px;border:1px solid var(--borde);border-left:4px solid var(--oro);border-radius:2px;background:#fff;color:#625b4e;font-size:13px;box-shadow:0 3px 12px #20180b0a}
+#catalogo{max-width:1180px;gap:15px;padding:0 14px 45px}
+.producto{border:1px solid var(--borde);border-radius:3px;background:#fff;box-shadow:0 5px 18px #20180b0c;transition:transform .18s ease,box-shadow .18s ease}
+.producto::before{height:3px;background:var(--oro)}
+.producto:hover{transform:translateY(-3px);box-shadow:0 10px 23px #20180b18}
+.producto.resurtido{border:2px solid #c97b32;background:#fffaf3}
+.producto.resurtido::before{background:linear-gradient(90deg,#d08a3d,#b74d39)}
+.producto img{margin-top:3px;background:#eeece7;object-fit:contain}
+.contenido{padding:13px}.nombre{color:#211f1a;font-size:14px;font-weight:700}.existencias{color:#81785f;font-size:12px;font-weight:600}
+.talla{min-width:43px;min-height:38px;border:1px solid #e1d7c2;border-radius:2px;background:#faf8f3;color:#302b20;box-shadow:none}
+.ultimo{border-color:#c66a5d;background:#a84b42;color:#fff}
+.sin-resultados{border:1px solid var(--borde);border-radius:3px;background:#fff;color:#615b50}
+.visor-imagen{background:#000e}.visor-imagen img{border:2px solid var(--oro);border-radius:2px}.visor-ayuda{color:#f4eee2}
+.encabezado-resurtido{border:1px solid #d6b96f;border-radius:3px;background:#f5eddc;color:#8b6330}
+.fila-resurtido{border-color:var(--borde);border-radius:3px;background:#fff;color:var(--tinta)}
+.fila-resurtido.encabezados{border-color:#29251d;background:#29251d;color:#fff}
+.numero-talla{color:#8b6330}.shop-cero{color:#b84036}.shop-bajo{color:#b56722}
+.mandar{border-radius:3px;background:#46613e}
+.resumen-modelo{border:1px solid #e3d4b4;border-radius:3px;background:#f5eddc;color:#4f4129}
+body.modo-privado .hero-natalia,body.modo-privado .catalogo-intro{display:none}
+@media(max-width:650px){
+header{padding:12px 12px 14px}header h1{margin-bottom:10px;font-size:18px;letter-spacing:2px}
+.controles{grid-template-columns:1fr;gap:7px}select,.boton-admin,.boton-resurtir{min-height:47px}select{padding:10px 12px;font-size:15px}
+.hero-contenido-natalia{padding:45px 18px 40px}.hero-natalia h2{max-width:430px;font-size:39px}
+.hero-natalia p{max-width:390px;font-size:14px}.hero-natalia::after{top:-110px;right:-260px}
+.catalogo-intro{padding:28px 14px 0}.catalogo-intro h2{font-size:29px}
+#estado{margin-top:13px;padding:8px 11px;font-size:12px}#catalogo{gap:9px;padding:0 9px 34px}
+.producto{border-radius:3px}.contenido{padding:9px}.nombre{font-size:12px}.existencias{font-size:10px}
+.talla{min-width:35px;min-height:34px;padding:4px;font-size:10px}.encabezado-resurtido{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important}}
+</style>
+<style id="negro-dorado">
+:root{--oro:#d0ad5b;--oro-claro:#f0d98f;--tinta:#f3eee3;--papel:#090908;--borde:#4b3c1c}
+body{color:#f3eee3;background:radial-gradient(ellipse at 50% 0%,#201a0c 0,transparent 32rem),#090908}
+header{background:#050505;border-bottom:2px solid #c6a24f;box-shadow:0 6px 24px #000b}
+header h1{color:#e2c46f}
+select{border-color:#b99542;background:#f8f4e9;color:#1b180f}
+.boton-admin,.boton-resurtir{border-color:#b99542}
+.boton-admin{background:#17150f;color:#eddaa1}
+.boton-admin.activo{background:#263321;border-color:#9fb178}
+.boton-resurtir{background:linear-gradient(135deg,#9b762d,#624812);color:#fff3cb}
+.hero-natalia{background:linear-gradient(112deg,#050505 0%,#0e0d0a 58%,#261d0c 100%)}
+.hero-natalia::after{border-color:#d1ac5855;box-shadow:0 0 0 35px #d1ac5813,0 0 0 70px #d1ac5809}
+.hero-sobrelinea,.catalogo-intro span{color:#d9bb6b}
+.hero-natalia h2{color:#fff7dc}
+.hero-boton-natalia{border-color:#d0ad5b;color:#f0d98f}
+.hero-boton-natalia:hover,.hero-boton-natalia:focus{background:#d0ad5b;color:#111}
+.catalogo-intro{color:#e9dfc5}
+.catalogo-intro h2{color:#e4c56f}
+#estado{border-color:#705a25;border-left-color:#d0ad5b;background:#15130e;color:#f1e7cf;box-shadow:0 4px 16px #0008}
+.producto{border-color:#55451f;background:linear-gradient(160deg,#1a1812,#0e0e0c);box-shadow:0 7px 22px #0009}
+.producto::before{background:linear-gradient(90deg,#8e6b25,#f0d98f,#9f792e)}
+.producto:hover{box-shadow:0 12px 28px #000b,0 0 0 1px #d0ad5b}
+.producto.resurtido{border-color:#d29b45;background:#21190d}
+.producto img{background:#eee8d9}
+.nombre{color:#f3d989}
+.existencias{color:#d0c6ad}
+.talla{border-color:#b89547;background:linear-gradient(145deg,#252014,#13120e);color:#f2d987;box-shadow:inset 0 0 0 1px #d0ad5b22}
+.talla:hover,.talla:focus{background:#d0ad5b;color:#111}
+.ultimo{border-color:#b74840;background:#84352f;color:#fff}
+.sin-resultados{border-color:#705a25;background:#14120e;color:#efe7d7}
+.visor-imagen{background:#000f}.visor-imagen img{border-color:#d0ad5b}.visor-ayuda{color:#f0d98f}
+.encabezado-resurtido{border-color:#d0ad5b;background:#2a2110;color:#f0d98f}
+.fila-resurtido{border-color:#4b3c1c;background:#15130f;color:#f1ead9}
+.fila-resurtido.encabezados{border-color:#b99542;background:linear-gradient(100deg,#594416,#251e10);color:#ffe8a6}
+.numero-talla{color:#f0d98f}.shop-cero{color:#ff7777}.shop-bajo{color:#ffc267}
+.mandar{background:linear-gradient(135deg,#47603d,#293b24);color:#f1f7df}
+.resumen-modelo{border-color:#9b7b36;background:#28200e;color:#f0d98f}
+@media(max-width:650px){.catalogo-intro{padding-top:28px}#catalogo{padding-bottom:34px}}
+</style>
 </head>
 <body>
   <header>
@@ -799,6 +894,20 @@
       </select>
     </div>
   </header>
+
+  <section class="hero-natalia">
+    <div class="hero-contenido-natalia">
+      <div class="hero-sobrelinea">Colección Tenis Natalia</div>
+      <h2>Encuentra tu próximo par favorito.</h2>
+      <p>Explora los modelos y consulta las tallas disponibles en tienda.</p>
+      <a class="hero-boton-natalia" href="#catalogo-intro">Ver catálogo&nbsp; ↓</a>
+    </div>
+  </section>
+
+  <section class="catalogo-intro" id="catalogo-intro">
+    <span>Descubre la colección</span>
+    <h2>Nuestro catálogo</h2>
+  </section>
 
   <div id="estado">Cargando catálogo...</div>
 
@@ -871,6 +980,7 @@
     }
 
     function actualizarControles() {
+      document.body.classList.toggle("modo-privado", modoAdmin);
       accesoAdmin.textContent = modoAdmin
         ? "🔓 Volver a tienda"
         : "🔒 Acceso privado";
